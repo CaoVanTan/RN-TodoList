@@ -10,4 +10,5 @@ export default {
     black: '#000000',
     white: '#FFFFFF',
     pink: '#F3B5B6',
+    backgroundHover: '#ECF0FB',
 };

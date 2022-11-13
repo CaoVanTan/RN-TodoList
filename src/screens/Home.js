@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import HeaderDrawer from '../components/Header/HeaderDrawer';
 import Button from '../components/Button/Button';
 import TaskListItem from '../components/TaskListItem/TaskListItem';
+import ModalAdd from '../components/Modal/ModalAdd';
 
 const tasks = [
     {
@@ -32,13 +33,15 @@ const tasks = [
 ];
 
 const Home = () => {
-    const [task, setTask] = useState(' ');
+    const [task, setTask] = useState(tasks);
+    const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <View style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={Colors.background} />
             <HeaderDrawer title="Hôm nay" />
-            <Button style={styles.button} type="round" />
+            <Button style={styles.button} type="round" onPress={() => setModalVisible(true)} />
+
             {task === '' ? (
                 <View style={styles.wrapper1}>
                     <Image style={styles.image} source={require('../../assets/backgrounds/today.png')} />
@@ -54,6 +57,8 @@ const Home = () => {
                     <TaskListItem data={tasks} type="finished" />
                 </View>
             )}
+
+            {modalVisible ? <ModalAdd visible={modalVisible} setModalVisible={setModalVisible} /> : null}
         </View>
     );
 };
