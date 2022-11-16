@@ -1,6 +1,6 @@
 import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import HeaderDrawer from '../components/Header/HeaderDrawer';
@@ -40,7 +40,9 @@ const Home = () => {
         <View style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={Colors.background} />
             <HeaderDrawer title="Hôm nay" />
-            <Button style={styles.button} type="round" onPress={() => setModalVisible(true)} />
+            <Button style={styles.button} onPress={() => setModalVisible(true)}>
+                <MaterialIcons name="add" size={32} color={Colors.white} />
+            </Button>
 
             {task === '' ? (
                 <View style={styles.wrapper1}>

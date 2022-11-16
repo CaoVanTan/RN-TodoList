@@ -1,6 +1,5 @@
 import {
     StyleSheet,
-    Text,
     View,
     Modal,
     TouchableOpacity,
@@ -16,6 +15,8 @@ import { AntDesign, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import MenuItem from '../MenuItem/MenuItem';
 import ButtonIcon from '../Button/ButtonIcon';
+import ModalDate from './ModalDate';
+import Layout from '../../constants/Layout';
 
 const tags = [
     {
@@ -70,6 +71,7 @@ const ModalAdd = (props) => {
     const [activeItem, setActiveItem] = useState(true);
     const [modalTag, setModalTag] = useState(false);
     const [modalType, setModalType] = useState(false);
+    const [modalDate, setModalDate] = useState(false);
 
     useEffect(() => {
         setTimeout(() => inputRef.current.focus(), 150);
@@ -96,7 +98,7 @@ const ModalAdd = (props) => {
                     </View>
 
                     <TouchableWithoutFeedback onPress={() => setModalVisible(!visible)}>
-                        <View style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.4)' }}></View>
+                        <View style={styles.containerMiddle}></View>
                     </TouchableWithoutFeedback>
 
                     <View style={styles.containerFooter}>
@@ -113,30 +115,26 @@ const ModalAdd = (props) => {
                                 <MenuItem
                                     title="Hôm nay"
                                     textColor={activeItem ? Colors.primary : Colors.textGray2}
-                                    onPress={() => {}}
-                                >
-                                    <Ionicons
-                                        name="ios-calendar"
-                                        size={20}
-                                        color={activeItem ? Colors.primary : Colors.textGray2}
-                                    />
-                                </MenuItem>
+                                    icon={
+                                        <Ionicons
+                                            name="ios-calendar"
+                                            size={20}
+                                            color={activeItem ? Colors.primary : Colors.textGray2}
+                                        />
+                                    }
+                                    onPress={() => {
+                                        setModalDate(true);
+                                    }}
+                                />
+
+                                {modalDate ? <ModalDate modalDate={modalDate} setModalDate={setModalDate} /> : null}
 
                                 <ButtonIcon style={styles.buttonIcon} onPress={() => setModalTag(!modalTag)}>
                                     <Ionicons name="flag" size={20} color={Colors.textGray2} />
                                 </ButtonIcon>
 
                                 {modalTag ? (
-                                    <View
-                                        style={{
-                                            position: 'absolute',
-                                            backgroundColor: Colors.white,
-                                            bottom: 98,
-                                            left: -8,
-                                            borderRadius: 6,
-                                            elevation: 10,
-                                        }}
-                                    >
+                                    <View style={styles.popup}>
                                         <FlatList
                                             data={tags}
                                             renderItem={({ item }) => (
@@ -144,9 +142,8 @@ const ModalAdd = (props) => {
                                                     style={{ paddingHorizontal: 16, paddingRight: 56 }}
                                                     title={item.title}
                                                     onPress={() => setModalTag(false)}
-                                                >
-                                                    <Ionicons name="flag" size={20} color={Colors.textGray2} />
-                                                </MenuItem>
+                                                    icon={<Ionicons name="flag" size={20} color={Colors.textGray2} />}
+                                                />
                                             )}
                                             keyExtractor={(item) => item.id}
                                         />
@@ -161,21 +158,11 @@ const ModalAdd = (props) => {
                                     title="Hộp thư đến"
                                     textColor={Colors.textGray2}
                                     onPress={() => setModalType(!modalType)}
-                                >
-                                    <MaterialIcons name="inbox" size={20} color={Colors.textGray2} />
-                                </MenuItem>
+                                    icon={<MaterialIcons name="inbox" size={20} color={Colors.textGray2} />}
+                                />
 
                                 {modalType ? (
-                                    <View
-                                        style={{
-                                            position: 'absolute',
-                                            backgroundColor: Colors.white,
-                                            bottom: 98,
-                                            left: -8,
-                                            borderRadius: 6,
-                                            elevation: 10,
-                                        }}
-                                    >
+                                    <View style={styles.popup}>
                                         <FlatList
                                             data={types}
                                             renderItem={({ item }) => (
@@ -183,9 +170,8 @@ const ModalAdd = (props) => {
                                                     style={{ paddingHorizontal: 16, paddingRight: 64 }}
                                                     title={item.title}
                                                     onPress={() => setModalTag(false)}
-                                                >
-                                                    <Image source={item.uri} style={{ width: 20, height: 20 }} />
-                                                </MenuItem>
+                                                    icon={<Image source={item.uri} style={{ width: 20, height: 20 }} />}
+                                                />
                                             )}
                                             keyExtractor={(item) => item.id}
                                         />
@@ -233,6 +219,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: Colors.background,
     },
+    containerMiddle: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    },
     containerFooter: {
         width: '100%',
         backgroundColor: Colors.white,
@@ -251,6 +242,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 8,
         marginHorizontal: 8,
+    },
+    popup: {
+        position: 'absolute',
+        backgroundColor: Colors.white,
+        bottom: 98,
+        left: -8,
+        borderRadius: 6,
+        elevation: 10,
     },
     wrapperChild: {
         flexDirection: 'row',
