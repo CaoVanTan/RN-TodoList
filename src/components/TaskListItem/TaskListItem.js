@@ -2,7 +2,7 @@ import { StyleSheet, FlatList, View, Text, TouchableHighlight } from 'react-nati
 import React, { useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
 
-import TaskItem from '../TaskItem/TaskItem';
+import TaskItem from './TaskItem';
 import Colors from '../../constants/Colors';
 
 const TaskListItem = (props) => {
@@ -15,8 +15,8 @@ const TaskListItem = (props) => {
             ListHeaderComponent={() => (
                 <TouchableHighlight
                     style={{ borderRadius: 6 }}
-                    activeOpacity={0.7}
-                    underlayColor={Colors.textGray3}
+                    activeOpacity={0.8}
+                    underlayColor={Colors.textGray2}
                     onPress={() => setVisible(!visible)}
                 >
                     <View style={[styles.wrapper, !visible ? styles.borderRadiusBottom : null]}>
@@ -33,14 +33,20 @@ const TaskListItem = (props) => {
                 </TouchableHighlight>
             )}
             data={data}
-            renderItem={({ item }) => (item.status && visible ? <TaskItem data={item} type="finished" /> : null)}
+            renderItem={({ item }) =>
+                item.status && visible ? (
+                    <TaskItem data={item} type="checkbox" status="finished" onPress={() => {}} />
+                ) : null
+            }
             keyExtractor={(item) => item.id}
         />
     ) : (
         <FlatList
             style={{ paddingHorizontal: 8 }}
             data={data}
-            renderItem={({ item }) => (!item.status ? <TaskItem data={item} /> : null)}
+            renderItem={({ item }) =>
+                !item.status ? <TaskItem data={item} type="checkbox" onPress={() => {}} /> : null
+            }
             keyExtractor={(item) => item.id}
         />
     );

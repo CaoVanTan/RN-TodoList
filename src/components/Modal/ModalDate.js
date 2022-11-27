@@ -1,4 +1,4 @@
-import { StyleSheet, Modal, View, Text } from 'react-native';
+import { StyleSheet, Modal, View, Text, StatusBar } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Ionicons, FontAwesome, Entypo } from '@expo/vector-icons';
@@ -6,10 +6,15 @@ import { Ionicons, FontAwesome, Entypo } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import Button from '../Button/Button';
-import MenuItem from '../MenuItem/MenuItem';
+import MenuItem from '../Menu/MenuItem';
+import ModalTimePicker from './ModalTimePicker';
+import ModalReminder from './ModalReminder';
 
 const ModalDate = (props) => {
     const { modalDate, setModalDate } = props;
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [showReminder, setShowReminder] = useState(false);
+    const [time, setTime] = useState();
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -57,6 +62,7 @@ const ModalDate = (props) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar barStyle={'dark-content'} backgroundColor={'rgba(0, 0, 0, 0.4)'} />
             <Modal
                 animationType="fade"
                 transparent
@@ -110,8 +116,7 @@ const ModalDate = (props) => {
                             <View>
                                 <MenuItem
                                     title="Đặt thời gian"
-                                    style={{ marginHorizontal: 8 }}
-                                    onPress={() => {}}
+                                    onPress={() => setShowTimePicker(true)}
                                     textColor={Colors.black}
                                     icon={
                                         <View>
@@ -125,10 +130,18 @@ const ModalDate = (props) => {
                                     </View>
                                 </MenuItem>
 
+                                <ModalTimePicker
+                                    showTimePicker={showTimePicker}
+                                    setShowTimePicker={setShowTimePicker}
+                                    time={time}
+                                    setTime={setTime}
+                                />
+
                                 <MenuItem
                                     title="Đặt lời nhắc"
-                                    style={{ marginHorizontal: 8 }}
-                                    onPress={() => {}}
+                                    onPress={() => {
+                                        setShowReminder(true);
+                                    }}
                                     textColor={Colors.black}
                                     icon={
                                         <View>
@@ -142,9 +155,10 @@ const ModalDate = (props) => {
                                     </View>
                                 </MenuItem>
 
+                                <ModalReminder visible={showReminder} setVisible={setShowReminder} />
+
                                 <MenuItem
                                     title="Đặt lặp lại"
-                                    style={{ marginHorizontal: 8 }}
                                     onPress={() => {}}
                                     textColor={Colors.black}
                                     icon={
@@ -168,7 +182,7 @@ const ModalDate = (props) => {
                                         title="Hủy bỏ"
                                         onPress={() => setModalDate(!modalDate)}
                                     />
-                                    <Button style={styles.button} title="Ok" />
+                                    <Button style={styles.button} title="Ok" onPress={() => setModalDate(!modalDate)} />
                                 </View>
                             </View>
                         </View>

@@ -6,7 +6,7 @@ import Colors from '../constants/Colors';
 import HeaderDrawer from '../components/Header/HeaderDrawer';
 import Button from '../components/Button/Button';
 import TaskListItem from '../components/TaskListItem/TaskListItem';
-import ModalAdd from '../components/Modal/ModalAdd';
+import ModalAddTask from '../components/Modal/ModalAddTask';
 
 const tasks = [
     {
@@ -60,7 +60,7 @@ const Home = () => {
                 </View>
             )}
 
-            {modalVisible ? <ModalAdd visible={modalVisible} setModalVisible={setModalVisible} /> : null}
+            {modalVisible ? <ModalAddTask visible={modalVisible} setModalVisible={setModalVisible} /> : null}
         </View>
     );
 };

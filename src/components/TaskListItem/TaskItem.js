@@ -1,37 +1,35 @@
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import React, { useState } from 'react';
+
 import Colors from '../../constants/Colors';
 
-const TaskItem = (props) => {
-    const { data, style, type } = props;
-    const [isChecked, setChecked] = useState(data.status);
+const MenuItem = (props) => {
+    const { data, style, status, onPress } = props;
+    const [isChecked, setChecked] = useState(data && data.status);
 
     return (
-        <TouchableHighlight
-            activeOpacity={0.7}
-            underlayColor={Colors.textGray3}
-            onPress={() => console.log('Clicked!')}
-        >
+        <TouchableHighlight activeOpacity={0.8} underlayColor={Colors.textGray2} onPress={onPress}>
             <View style={[styles.container, style]}>
                 <View style={styles.containerLeft}>
                     <Checkbox
-                        style={type === 'finished' ? styles.checkboxDisable : styles.checkbox}
+                        style={status == 'finished' ? styles.checkboxDisable : styles.checkbox}
                         value={isChecked}
                         onValueChange={setChecked}
-                        color={type === 'finished' ? Colors.textGray2 : null}
+                        color={status == 'finished' ? Colors.textGray2 : null}
                     />
-                    <Text style={type === 'finished' ? styles.titleDisable : styles.title}>{data.title}</Text>
+
+                    <Text style={status == 'finished' ? styles.titleDisable : styles.title}>{data.title}</Text>
                 </View>
                 <View style={styles.containerRight}>
-                    <Text style={type === 'finished' ? styles.timeDisable : styles.time}>{data.time}</Text>
+                    <Text style={status == 'finished' ? styles.timeDisable : styles.time}>{data && data.time}</Text>
                 </View>
             </View>
         </TouchableHighlight>
     );
 };
 
-export default TaskItem;
+export default MenuItem;
 
 const styles = StyleSheet.create({
     container: {
@@ -51,21 +49,21 @@ const styles = StyleSheet.create({
         borderColor: Colors.textGray1,
         width: 18,
         height: 18,
-        marginRight: 12,
     },
     checkboxDisable: {
         borderColor: Colors.textGray2,
         width: 18,
         height: 18,
-        marginRight: 12,
     },
     title: {
-        fontSize: 16,
+        fontSize: 15,
         color: Colors.text,
+        marginLeft: 12,
     },
     titleDisable: {
-        fontSize: 16,
+        fontSize: 15,
         color: Colors.textGray2,
+        marginLeft: 12,
     },
     containerRight: {
         justifyContent: 'center',

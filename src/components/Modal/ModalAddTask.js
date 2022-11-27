@@ -6,38 +6,32 @@ import {
     TextInput,
     TouchableHighlight,
     TouchableWithoutFeedback,
-    FlatList,
-    Image,
 } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import { AntDesign, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import Colors from '../../constants/Colors';
-import MenuItem from '../MenuItem/MenuItem';
 import ButtonIcon from '../Button/ButtonIcon';
 import ModalDate from './ModalDate';
-import Layout from '../../constants/Layout';
+import MenuIcon from '../Menu/MenuIcon';
+import Popup from '../Popup/Popup';
 
 const tags = [
     {
         id: 1,
         title: 'High Priority',
-        uri: '',
     },
     {
         id: 2,
         title: 'Medium Priority',
-        uri: '',
     },
     {
         id: 3,
         title: 'Low Priority',
-        uri: '',
     },
     {
         id: 4,
         title: 'No Priority',
-        uri: '',
     },
 ];
 
@@ -64,7 +58,7 @@ const types = [
     },
 ];
 
-const ModalAdd = (props) => {
+const ModalAddTask = (props) => {
     const { visible, setModalVisible } = props;
     const inputRef = useRef();
     const [text, setText] = useState('');
@@ -112,9 +106,9 @@ const ModalAdd = (props) => {
                         />
                         <View style={styles.wrapper}>
                             <View style={styles.wrapperChild}>
-                                <MenuItem
+                                <MenuIcon
                                     title="Hôm nay"
-                                    textColor={activeItem ? Colors.primary : Colors.textGray2}
+                                    titleColor={activeItem ? Colors.primary : Colors.textGray2}
                                     icon={
                                         <Ionicons
                                             name="ios-calendar"
@@ -124,59 +118,53 @@ const ModalAdd = (props) => {
                                     }
                                     onPress={() => {
                                         setModalDate(true);
+                                        setModalTag(false);
+                                        setModalType(false);
                                     }}
                                 />
 
-                                {modalDate ? <ModalDate modalDate={modalDate} setModalDate={setModalDate} /> : null}
+                                {modalDate && <ModalDate modalDate={modalDate} setModalDate={setModalDate} />}
 
-                                <ButtonIcon style={styles.buttonIcon} onPress={() => setModalTag(!modalTag)}>
+                                <ButtonIcon
+                                    style={styles.buttonIcon}
+                                    onPress={() => {
+                                        setModalTag(!modalTag);
+                                        setModalType(false);
+                                    }}
+                                >
                                     <Ionicons name="flag" size={20} color={Colors.textGray2} />
                                 </ButtonIcon>
 
-                                {modalTag ? (
-                                    <View style={styles.popup}>
-                                        <FlatList
-                                            data={tags}
-                                            renderItem={({ item }) => (
-                                                <MenuItem
-                                                    style={{ paddingHorizontal: 16, paddingRight: 56 }}
-                                                    title={item.title}
-                                                    onPress={() => setModalTag(false)}
-                                                    icon={<Ionicons name="flag" size={20} color={Colors.textGray2} />}
-                                                />
-                                            )}
-                                            keyExtractor={(item) => item.id}
-                                        />
-                                    </View>
-                                ) : null}
+                                {modalTag && (
+                                    <Popup
+                                        data={tags}
+                                        // icon={<Ionicons name="flag" size={20} color={Colors.textGray2} />}
+                                        onPress={() => setModalTag(false)}
+                                    />
+                                )}
 
-                                <ButtonIcon style={styles.buttonIcon} onPress={() => setText((prev) => prev + '#')}>
+                                <ButtonIcon
+                                    style={styles.buttonIcon}
+                                    onPress={() => {
+                                        setText((prev) => prev + '#');
+                                        setModalTag(false);
+                                        setModalType(false);
+                                    }}
+                                >
                                     <AntDesign name="tag" size={20} color={Colors.textGray2} />
                                 </ButtonIcon>
 
-                                <MenuItem
+                                <MenuIcon
                                     title="Hộp thư đến"
-                                    textColor={Colors.textGray2}
-                                    onPress={() => setModalType(!modalType)}
+                                    titleColor={Colors.textGray2}
                                     icon={<MaterialIcons name="inbox" size={20} color={Colors.textGray2} />}
+                                    onPress={() => {
+                                        setModalType(!modalType);
+                                        setModalTag(false);
+                                    }}
                                 />
 
-                                {modalType ? (
-                                    <View style={styles.popup}>
-                                        <FlatList
-                                            data={types}
-                                            renderItem={({ item }) => (
-                                                <MenuItem
-                                                    style={{ paddingHorizontal: 16, paddingRight: 64 }}
-                                                    title={item.title}
-                                                    onPress={() => setModalTag(false)}
-                                                    icon={<Image source={item.uri} style={{ width: 20, height: 20 }} />}
-                                                />
-                                            )}
-                                            keyExtractor={(item) => item.id}
-                                        />
-                                    </View>
-                                ) : null}
+                                {modalType && <Popup data={types} onPress={() => setModalTag(false)} />}
                             </View>
 
                             <View style={styles.wrapperChild}>
@@ -202,7 +190,7 @@ const ModalAdd = (props) => {
     );
 };
 
-export default ModalAdd;
+export default ModalAddTask;
 
 const styles = StyleSheet.create({
     container: {
@@ -227,8 +215,7 @@ const styles = StyleSheet.create({
     containerFooter: {
         width: '100%',
         backgroundColor: Colors.white,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
+        paddingTop: 6,
     },
     input: {
         width: '100%',
@@ -242,14 +229,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 8,
         marginHorizontal: 8,
-    },
-    popup: {
-        position: 'absolute',
-        backgroundColor: Colors.white,
-        bottom: 98,
-        left: -8,
-        borderRadius: 6,
-        elevation: 10,
     },
     wrapperChild: {
         flexDirection: 'row',

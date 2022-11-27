@@ -1,16 +1,20 @@
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+
 import Colors from '../../constants/Colors';
 
 const MenuItem = (props) => {
-    const { title, children, style, onPress, textColor, icon } = props;
+    const { data, title, icon, children, style, titleColor, titleSize, onPress } = props;
+    const [isChecked, setChecked] = useState(data && data.status);
 
     return (
-        <TouchableHighlight activeOpacity={0.8} underlayColor={Colors.textGray3} onPress={onPress}>
+        <TouchableHighlight activeOpacity={0.8} underlayColor={Colors.textGray2} onPress={onPress}>
             <View style={[styles.container, style]}>
                 <View style={styles.containerLeft}>
                     {icon}
-                    <Text style={[styles.title, { color: textColor }]}>{title}</Text>
+                    <Text style={[{ color: titleColor, fontSize: titleSize }, styles.title]}>
+                        {title ? title : data.title}
+                    </Text>
                 </View>
                 {children}
             </View>
@@ -25,15 +29,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 8,
+        paddingHorizontal: 16,
         paddingVertical: 12,
+        backgroundColor: Colors.white,
     },
     containerLeft: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     title: {
-        marginLeft: 8,
+        fontSize: 16,
+        color: Colors.text,
+        marginLeft: 12,
+    },
+    containerRight: {
+        justifyContent: 'center',
     },
 });
