@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     },
     containerMiddle: {
         width: Layout.window.width - 70,
-        paddingVertical: 16,
+        paddingTop: 24,
+        paddingBottom: 16,
         backgroundColor: Colors.white,
         borderRadius: 8,
     },

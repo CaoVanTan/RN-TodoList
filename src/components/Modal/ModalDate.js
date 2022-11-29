@@ -9,11 +9,13 @@ import Button from '../Button/Button';
 import MenuItem from '../Menu/MenuItem';
 import ModalTimePicker from './ModalTimePicker';
 import ModalReminder from './ModalReminder';
+import ModalRepeat from './ModalRepeat';
 
 const ModalDate = (props) => {
     const { modalDate, setModalDate } = props;
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [showReminder, setShowReminder] = useState(false);
+    const [showRepeat, setShowRepeat] = useState(false);
     const [time, setTime] = useState();
 
     var today = new Date();
@@ -159,7 +161,9 @@ const ModalDate = (props) => {
 
                                 <MenuItem
                                     title="Đặt lặp lại"
-                                    onPress={() => {}}
+                                    onPress={() => {
+                                        setShowRepeat(true);
+                                    }}
                                     textColor={Colors.black}
                                     icon={
                                         <View style={{ paddingHorizontal: 2 }}>
@@ -172,6 +176,8 @@ const ModalDate = (props) => {
                                         <Entypo name="chevron-small-right" size={20} color={Colors.textGray2} />
                                     </View>
                                 </MenuItem>
+
+                                <ModalRepeat visible={showRepeat} setVisible={setShowRepeat} />
                             </View>
 
                             <View style={styles.groupButton}>

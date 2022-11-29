@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import React, { useState } from 'react';
 import Checkbox from 'expo-checkbox';
+import RadioGroup from 'react-native-radio-buttons-group';
 
 import Colors from '../../constants/Colors';
 
@@ -12,16 +13,15 @@ const MenuIcon = (props) => {
         <TouchableHighlight activeOpacity={0.8} underlayColor={Colors.textGray3} onPress={onPress}>
             <View style={[styles.container, style]}>
                 <View style={styles.containerLeft}>
-                    {type == 'checkbox' ? (
+                    {type == 'checkbox' && (
                         <Checkbox
                             style={styles.checkbox}
                             value={isChecked}
                             onValueChange={setChecked}
                             color={Colors.textGray2}
                         />
-                    ) : (
-                        icon
                     )}
+                    {icon && icon}
                     <Text style={[styles.title, { color: titleColor, fontSize: titleSize }]}>
                         {data ? data.title : title}
                     </Text>
