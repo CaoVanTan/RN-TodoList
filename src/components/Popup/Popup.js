@@ -6,15 +6,15 @@ import Colors from '../../constants/Colors';
 import MenuIcon from '../Menu/MenuIcon';
 
 const Popup = (props) => {
-    const { data, icon, onPress } = props;
+    const { data, icon, style, styleItem, onPress } = props;
 
     return (
-        <View style={styles.popup}>
+        <View style={[styles.popup, style ? style : { bottom: 105, left: -6 }]}>
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
                     <MenuIcon
-                        style={{ paddingHorizontal: 16, paddingRight: 56 }}
+                        style={[{ paddingHorizontal: 16 }, styleItem || { paddingRight: 56 }]}
                         title={item.title}
                         icon={
                             item.uri ? (
@@ -38,9 +38,8 @@ const styles = StyleSheet.create({
     popup: {
         position: 'absolute',
         backgroundColor: Colors.white,
-        bottom: 105,
-        left: -6,
         borderRadius: 6,
         elevation: 10,
+        zIndex: 10,
     },
 });

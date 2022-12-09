@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 
 const HeaderCalendar = (props) => {
-    const { title } = props;
+    const { title, onPressMenu } = props;
 
     return (
         <View style={styles.container}>
@@ -22,7 +22,7 @@ const HeaderCalendar = (props) => {
                 >
                     <Text style={{ fontSize: 16 }}>Hôm nay</Text>
                 </TouchableHighlight>
-                <TouchableOpacity activeOpacity={0.6} style={{ paddingLeft: 8 }}>
+                <TouchableOpacity activeOpacity={0.6} style={{ paddingLeft: 8 }} onPress={onPressMenu}>
                     <MaterialCommunityIcons name="dots-vertical" size={24} color={Colors.black} />
                 </TouchableOpacity>
             </View>

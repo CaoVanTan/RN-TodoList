@@ -8,6 +8,7 @@ import Button from '../components/Button/Button';
 import ModalAddTask from '../components/Modal/ModalAddTask';
 import TaskListItem from '../components/TaskListItem/TaskListItem';
 import HeaderCalendar from '../components/Header/HeaderCalendar';
+import Popup from '../components/Popup/Popup';
 
 const tasks = [
     {
@@ -33,9 +34,38 @@ const tasks = [
     },
 ];
 
+const menus = [
+    {
+        id: 1,
+        title: 'Tùy chọn xem',
+        uri: require('../../assets/menu-icons/setting.png'),
+    },
+    {
+        id: 2,
+        title: 'Sắp xếp nhiệm vụ',
+        uri: require('../../assets/menu-icons/sort-ascending.png'),
+    },
+    {
+        id: 3,
+        title: 'Đăng ký lịch',
+        uri: require('../../assets/menu-icons/event.png'),
+    },
+    {
+        id: 4,
+        title: 'Chia sẻ',
+        uri: require('../../assets/menu-icons/share.png'),
+    },
+    {
+        id: 5,
+        title: 'Chọn',
+        uri: require('../../assets/menu-icons/checkboxes.png'),
+    },
+];
+
 const CalendarScreen = () => {
     const [task, setTask] = useState(tasks);
     const [modalVisible, setModalVisible] = useState(false);
+    const [menuShow, setMenuShow] = useState(true);
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -86,7 +116,16 @@ const CalendarScreen = () => {
         <View style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={Colors.background} />
 
-            <HeaderCalendar title={month} />
+            <HeaderCalendar title={month} onPressMenu={() => setMenuShow(!menuShow)} />
+
+            {menuShow && (
+                <Popup
+                    data={menus}
+                    style={{ top: 52, right: 2 }}
+                    styleItem={{ paddingRight: 16 }}
+                    onPress={() => setMenuShow(false)}
+                />
+            )}
 
             <Button style={styles.button} onPress={() => setModalVisible(true)}>
                 <MaterialIcons name="add" size={32} color={Colors.white} />

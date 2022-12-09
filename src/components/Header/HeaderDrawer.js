@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 
 const HeaderDrawer = (props) => {
-    const { title } = props;
+    const { title, onPressMenu } = props;
 
     return (
         <View style={styles.container}>
@@ -17,7 +17,7 @@ const HeaderDrawer = (props) => {
                 <Text style={styles.title}>{title}</Text>
             </View>
             <View style={styles.containerRight}>
-                <TouchableOpacity activeOpacity={0.6} style={{ paddingLeft: 8 }}>
+                <TouchableOpacity activeOpacity={0.6} style={{ paddingLeft: 8 }} onPress={onPressMenu}>
                     <MaterialCommunityIcons name="dots-vertical" size={24} color={Colors.black} />
                 </TouchableOpacity>
             </View>

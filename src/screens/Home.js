@@ -7,6 +7,7 @@ import HeaderDrawer from '../components/Header/HeaderDrawer';
 import Button from '../components/Button/Button';
 import TaskListItem from '../components/TaskListItem/TaskListItem';
 import ModalAddTask from '../components/Modal/ModalAddTask';
+import Popup from '../components/Popup/Popup';
 
 const tasks = [
     {
@@ -32,14 +33,54 @@ const tasks = [
     },
 ];
 
+const menus = [
+    {
+        id: 1,
+        title: 'Hiện chi tiết',
+        uri: require('../../assets/menu-icons/list.png'),
+    },
+    {
+        id: 2,
+        title: 'Ẩn đã hoàn thành',
+        uri: require('../../assets/menu-icons/tick.png'),
+    },
+    {
+        id: 3,
+        title: 'Sắp xếp',
+        uri: require('../../assets/menu-icons/sort.png'),
+    },
+    {
+        id: 4,
+        title: 'Chia sẻ',
+        uri: require('../../assets/menu-icons/share.png'),
+    },
+    {
+        id: 5,
+        title: 'Chọn',
+        uri: require('../../assets/menu-icons/checkboxes.png'),
+    },
+];
+
 const Home = () => {
     const [task, setTask] = useState(tasks);
     const [modalVisible, setModalVisible] = useState(false);
+    const [menuShow, setMenuShow] = useState(false);
 
     return (
         <View style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={Colors.background} />
-            <HeaderDrawer title="Hôm nay" />
+
+            <HeaderDrawer title="Hôm nay" onPressMenu={() => setMenuShow(!menuShow)} />
+
+            {menuShow && (
+                <Popup
+                    data={menus}
+                    style={{ top: 52, right: 2 }}
+                    styleItem={{ paddingRight: 16 }}
+                    onPress={() => setMenuShow(false)}
+                />
+            )}
+
             <Button style={styles.button} onPress={() => setModalVisible(true)}>
                 <MaterialIcons name="add" size={32} color={Colors.white} />
             </Button>
