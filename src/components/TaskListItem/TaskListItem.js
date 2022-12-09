@@ -6,47 +6,46 @@ import TaskItem from './TaskItem';
 import Colors from '../../constants/Colors';
 
 const TaskListItem = (props) => {
-    const { data, type } = props;
+    const { data, status, type, style, title } = props;
     const [visible, setVisible] = useState(true);
 
-    return type === 'finished' ? (
+    return (
         <FlatList
-            style={{ paddingHorizontal: 8, marginTop: 8 }}
+            style={[{ paddingHorizontal: 8 }, style]}
             ListHeaderComponent={() => (
                 <TouchableHighlight
                     style={{ borderRadius: 6 }}
                     activeOpacity={0.8}
                     underlayColor={Colors.textGray2}
-                    onPress={() => setVisible(!visible)}
+                    onPress={() => type === 'todo' && setVisible(!visible)}
                 >
                     <View style={[styles.wrapper, !visible ? styles.borderRadiusBottom : null]}>
-                        <Text style={styles.title}>ĐÃ HOÀN THÀNH</Text>
-                        <View style={styles.wrapperRight}>
-                            <Text style={{ color: Colors.textGray3, marginRight: 8 }}>2</Text>
-                            {visible ? (
-                                <Entypo name="chevron-small-down" size={24} color={Colors.textGray3} />
-                            ) : (
-                                <Entypo name="chevron-small-left" size={24} color={Colors.textGray3} />
-                            )}
-                        </View>
+                        <Text style={styles.title}>{status === 'finished' ? 'ĐÃ HOÀN THÀNH' : title}</Text>
+                        {type === 'todo' && (
+                            <View style={styles.wrapperRight}>
+                                <Text style={{ color: Colors.textGray3, marginRight: 8 }}>2</Text>
+                                {visible ? (
+                                    <Entypo name="chevron-small-down" size={24} color={Colors.textGray3} />
+                                ) : (
+                                    <Entypo name="chevron-small-left" size={24} color={Colors.textGray3} />
+                                )}
+                            </View>
+                        )}
                     </View>
                 </TouchableHighlight>
             )}
             data={data}
-            renderItem={({ item }) =>
-                item.status && visible ? (
-                    <TaskItem data={item} type="checkbox" status="finished" onPress={() => {}} />
-                ) : null
-            }
-            keyExtractor={(item) => item.id}
-        />
-    ) : (
-        <FlatList
-            style={{ paddingHorizontal: 8 }}
-            data={data}
-            renderItem={({ item }) =>
-                !item.status ? <TaskItem data={item} type="checkbox" onPress={() => {}} /> : null
-            }
+            renderItem={({ item }) => (
+                <>
+                    {status === 'finished' && item.status && visible && (
+                        <TaskItem data={item} type="checkbox" status="finished" onPress={() => {}} />
+                    )}
+
+                    {status !== 'finished' && !item.status && (
+                        <TaskItem data={item} type="checkbox" onPress={() => {}} />
+                    )}
+                </>
+            )}
             keyExtractor={(item) => item.id}
         />
     );
@@ -67,6 +66,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
+        textTransform: 'uppercase',
         color: Colors.textGray1,
     },
     wrapperRight: {

@@ -8,6 +8,13 @@ const MenuItem = (props) => {
     const { data, style, status, onPress } = props;
     const [isChecked, setChecked] = useState(data && data.status);
 
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = dd + '/' + mm + '/' + yyyy;
+
     return (
         <TouchableHighlight activeOpacity={0.8} underlayColor={Colors.textGray2} onPress={onPress}>
             <View style={[styles.container, style]}>
@@ -22,7 +29,9 @@ const MenuItem = (props) => {
                     <Text style={status == 'finished' ? styles.titleDisable : styles.title}>{data.title}</Text>
                 </View>
                 <View style={styles.containerRight}>
-                    <Text style={status == 'finished' ? styles.timeDisable : styles.time}>{data && data.time}</Text>
+                    <Text style={status == 'finished' ? styles.timeDisable : styles.time}>
+                        {data && data.time == today ? 'Hôm nay' : data.time}
+                    </Text>
                 </View>
             </View>
         </TouchableHighlight>

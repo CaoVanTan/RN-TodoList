@@ -21,7 +21,7 @@ const tasks = [
         type: 'today',
         title: 'Uống nước',
         status: false,
-        time: '13/11/2022',
+        time: '09/12/2022',
     },
     {
         id: 3,
@@ -55,8 +55,8 @@ const Home = () => {
                 </View>
             ) : (
                 <View style={styles.wrapper2}>
-                    <TaskListItem data={tasks} />
-                    <TaskListItem data={tasks} type="finished" />
+                    <TaskListItem style={{ marginBottom: 8 }} title="Hôm nay" data={tasks} />
+                    <TaskListItem data={tasks} status="finished" type="todo" />
                 </View>
             )}
 
