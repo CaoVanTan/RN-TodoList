@@ -65,7 +65,7 @@ const menus = [
 const CalendarScreen = () => {
     const [task, setTask] = useState(tasks);
     const [modalVisible, setModalVisible] = useState(false);
-    const [menuShow, setMenuShow] = useState(true);
+    const [menuShow, setMenuShow] = useState(false);
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
