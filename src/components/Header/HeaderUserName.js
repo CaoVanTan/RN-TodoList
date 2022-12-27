@@ -1,20 +1,22 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
 
 import Colors from '../../constants/Colors';
 
 const HeaderUserName = (props) => {
-    const { style, avatar, title } = props;
+    const { style, avatar, title, onPress } = props;
 
     return (
-        <View style={[styles.container, style]}>
-            <Image style={styles.avatar} source={avatar || require('../../../assets/images/user.png')} />
-            {title ? (
-                <Text style={styles.title}>{title}</Text>
-            ) : (
-                <Text style={styles.title}>Đăng nhập hoặc Đăng ký</Text>
-            )}
-        </View>
+        <TouchableWithoutFeedback onPress={onPress}>
+            <View style={[styles.container, style]}>
+                <Image style={styles.avatar} source={avatar || require('../../../assets/images/user.png')} />
+                {title ? (
+                    <Text style={styles.title}>{title}</Text>
+                ) : (
+                    <Text style={styles.title}>Đăng nhập hoặc Đăng ký</Text>
+                )}
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 

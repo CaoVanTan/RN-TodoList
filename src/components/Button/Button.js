@@ -3,13 +3,18 @@ import React from 'react';
 import Colors from '../../constants/Colors';
 
 const Button = (props) => {
-    const { style, type, onPress, children, title } = props;
+    const { containerStyle, style, type, title, titleStyle, children, onPress } = props;
 
     return (
-        <View style={[styles.container, style]}>
-            <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
-                {title ? <Text style={styles.title}>{title}</Text> : null}
+        <View style={containerStyle}>
+            <TouchableOpacity
+                style={[styles.container, style, type == 'disabled' && { opacity: 0.3 }]}
+                activeOpacity={0.6}
+                onPress={onPress}
+                disabled={type == 'disabled' ? true : false}
+            >
                 {children}
+                {title ? <Text style={[styles.title, titleStyle]}>{title}</Text> : null}
             </TouchableOpacity>
         </View>
     );
@@ -18,7 +23,10 @@ const Button = (props) => {
 export default Button;
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     title: {
         fontSize: 16,
         fontWeight: 'bold',

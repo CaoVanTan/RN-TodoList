@@ -1,6 +1,7 @@
 import { FlatList, StatusBar, StyleSheet, View, Image } from 'react-native';
 import React from 'react';
 import { Entypo } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import Colors from '../constants/Colors';
 import Header from '../components/Header/Header';
@@ -47,6 +48,8 @@ const menus = [
 ];
 
 const Setting = () => {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={Colors.background} />
@@ -56,7 +59,12 @@ const Setting = () => {
             <FlatList
                 data={menus}
                 style={{ marginHorizontal: 8 }}
-                ListHeaderComponent={() => <HeaderUserName style={{ marginTop: 12, marginBottom: 20 }} />}
+                ListHeaderComponent={() => (
+                    <HeaderUserName
+                        style={{ marginTop: 12, marginBottom: 20 }}
+                        onPress={() => navigation.navigate('Login')}
+                    />
+                )}
                 renderItem={({ item }) => (
                     <MenuItem
                         title={item.title}

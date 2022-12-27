@@ -81,7 +81,7 @@ const Home = () => {
                 />
             )}
 
-            <Button style={styles.button} onPress={() => setModalVisible(true)}>
+            <Button containerStyle={styles.buttonContainer} style={styles.button} onPress={() => setModalVisible(true)}>
                 <MaterialIcons name="add" size={32} color={Colors.white} />
             </Button>
 
@@ -113,10 +113,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.background,
     },
-    button: {
+    buttonContainer: {
         position: 'absolute',
         bottom: 20,
         right: 16,
+    },
+    button: {
         alignItems: 'center',
         justifyContent: 'center',
         width: 52,

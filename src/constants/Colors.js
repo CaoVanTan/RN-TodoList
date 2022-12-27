@@ -3,6 +3,7 @@ export default {
     textGray1: '#707175',
     textGray2: '#A5A6AB',
     textGray3: '#DADADA',
+    lightGray: '#EFEFEF',
     background: '#F2F5FE',
     primary: '#4773FA',
     tabIconDefault: '#BABBBD',
