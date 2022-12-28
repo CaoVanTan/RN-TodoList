@@ -7,6 +7,7 @@ import Colors from '../constants/Colors';
 import Header from '../components/Header/Header';
 import HeaderUserName from '../components/Header/HeaderUserName';
 import MenuItem from '../components/Menu/MenuItem';
+import { auth } from '../../firebase';
 
 // const users = {
 //     id: 1,
@@ -49,6 +50,7 @@ const menus = [
 
 const Setting = () => {
     const navigation = useNavigation();
+    const user = auth.currentUser;
 
     return (
         <View style={styles.container}>
@@ -62,6 +64,7 @@ const Setting = () => {
                 ListHeaderComponent={() => (
                     <HeaderUserName
                         style={{ marginTop: 12, marginBottom: 20 }}
+                        title={user.displayName || user.email}
                         onPress={() => navigation.navigate('Login')}
                     />
                 )}

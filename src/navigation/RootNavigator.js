@@ -8,7 +8,6 @@ import Calendar from '../screens/Calendar';
 import Setting from '../screens/Setting';
 import Login from '../screens/Login';
 import LoginEmail from '../screens/LoginEmail';
-import LoginPassword from '../screens/LoginPassword';
 // import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -23,7 +22,6 @@ const RootNavigator = () => {
             <Stack.Screen name="Setting" component={Setting} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="LoginEmail" component={LoginEmail} />
-            <Stack.Screen name="LoginPassword" component={LoginPassword} />
         </Stack.Navigator>
     );
 };
