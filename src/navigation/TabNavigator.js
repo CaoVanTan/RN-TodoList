@@ -1,4 +1,4 @@
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -19,7 +19,6 @@ const TabNavigator = () => {
                     height: 60,
                     backgroundColor: Colors.background,
                     borderTopWidth: 0,
-                    // elevation: 0,
                 },
                 tabBarLabelStyle: {
                     fontSize: 12,

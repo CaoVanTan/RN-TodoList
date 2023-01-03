@@ -1,19 +1,15 @@
-import { FlatList, StatusBar, StyleSheet, View, Image } from 'react-native';
-import React from 'react';
+import { FlatList, StatusBar, StyleSheet, View, Image, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import Colors from '../constants/Colors';
 import Header from '../components/Header/Header';
 import HeaderUserName from '../components/Header/HeaderUserName';
 import MenuItem from '../components/Menu/MenuItem';
-import { auth } from '../../firebase';
-
-// const users = {
-//     id: 1,
-//     username: 'Cao Văn Tân',
-//     uri: require('../../assets/images/user.png'),
-// };
+import Button from '../components/Button/Button';
+import { auth, logout } from '../../firebase';
 
 const menus = [
     {
@@ -50,7 +46,34 @@ const menus = [
 
 const Setting = () => {
     const navigation = useNavigation();
-    const user = auth.currentUser;
+    const [user, setUser] = useState(auth.currentUser);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUser(user);
+            }
+        });
+
+        return () => unsubscribe();
+    }, [user]);
+
+    const handleLogout = () => {
+        Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất không?', [
+            {
+                text: 'Hủy bỏ',
+                style: 'cancel',
+            },
+            {
+                text: 'Xác nhận',
+                onPress: async () => {
+                    console.log('OK Pressed');
+                    await logout(auth);
+                    navigation.navigate('Login');
+                },
+            },
+        ]);
+    };
 
     return (
         <View style={styles.container}>
@@ -61,13 +84,30 @@ const Setting = () => {
             <FlatList
                 data={menus}
                 style={{ marginHorizontal: 8 }}
-                ListHeaderComponent={() => (
-                    <HeaderUserName
-                        style={{ marginTop: 12, marginBottom: 20 }}
-                        title={user.displayName || user.email}
-                        onPress={() => navigation.navigate('Login')}
-                    />
-                )}
+                ListHeaderComponent={() =>
+                    user ? (
+                        <HeaderUserName
+                            style={{ marginTop: 12, marginBottom: 20 }}
+                            title={user.displayName || user.email}
+                            onPress={() => navigation.navigate('Login')}
+                        />
+                    ) : (
+                        <HeaderUserName
+                            style={{ marginTop: 12, marginBottom: 20 }}
+                            onPress={() => navigation.navigate('Login')}
+                        />
+                    )
+                }
+                ListFooterComponent={() =>
+                    user && (
+                        <Button
+                            title="Đăng xuất"
+                            style={styles.button}
+                            titleStyle={styles.titleButton}
+                            onPress={handleLogout}
+                        />
+                    )
+                }
                 renderItem={({ item }) => (
                     <MenuItem
                         title={item.title}
@@ -96,5 +136,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.background,
+    },
+    button: {
+        backgroundColor: Colors.white,
+        marginVertical: 8,
+        paddingVertical: 12,
+        borderRadius: 8,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    titleButton: {
+        fontSize: 16,
+        fontWeight: '400',
+        color: 'red',
+        textTransform: 'none',
     },
 });

@@ -1,5 +1,5 @@
 import { StyleSheet, StatusBar, View, Text, Image } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import Colors from '../constants/Colors';

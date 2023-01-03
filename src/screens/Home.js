@@ -1,6 +1,7 @@
 import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 import Colors from '../constants/Colors';
 import HeaderDrawer from '../components/Header/HeaderDrawer';
@@ -8,6 +9,8 @@ import Button from '../components/Button/Button';
 import TaskListItem from '../components/TaskListItem/TaskListItem';
 import ModalAddTask from '../components/Modal/ModalAddTask';
 import Popup from '../components/Popup/Popup';
+import { auth, db } from '../../firebase';
+import { AppContext } from '../../AppContext';
 
 const tasks = [
     {
@@ -62,9 +65,28 @@ const menus = [
 ];
 
 const Home = () => {
-    const [task, setTask] = useState(tasks);
+    const { todos, setTodos } = useContext(AppContext);
     const [modalVisible, setModalVisible] = useState(false);
     const [menuShow, setMenuShow] = useState(false);
+    const { isRefresh, setIsRefresh } = useContext(AppContext);
+
+    const loadTodoList = async () => {
+        const q = query(collection(db, 'todos'), where('userId', '==', auth.currentUser.uid));
+
+        const querySnapshot = await getDocs(q);
+        let toDos = [];
+        querySnapshot.forEach((doc) => {
+            let todo = doc.data();
+            todo.id = doc.id;
+            toDos.push(todo);
+        });
+        setTodos(toDos);
+        setIsRefresh(false);
+    };
+
+    if (isRefresh) {
+        loadTodoList();
+    }
 
     return (
         <View style={styles.container}>
@@ -85,7 +107,7 @@ const Home = () => {
                 <MaterialIcons name="add" size={32} color={Colors.white} />
             </Button>
 
-            {task === '' ? (
+            {todos === '' ? (
                 <View style={styles.wrapper1}>
                     <Image style={styles.image} source={require('../../assets/backgrounds/today.png')} />
                     <Text style={styles.title}>Hãy lập kế hoạch cho ngày hôm trước.</Text>
@@ -96,8 +118,8 @@ const Home = () => {
                 </View>
             ) : (
                 <View style={styles.wrapper2}>
-                    <TaskListItem style={{ marginBottom: 8 }} title="Hôm nay" data={tasks} />
-                    <TaskListItem data={tasks} status="finished" type="todo" />
+                    <TaskListItem style={{ marginBottom: 8 }} title="Hôm nay" data={todos} />
+                    <TaskListItem data={todos} status="finished" type="todo" />
                 </View>
             )}
 

@@ -30,7 +30,11 @@ const LoginEmail = () => {
         if (email.match(emailformat) && password.length >= 6 && password.length <= 64) {
             try {
                 await signIn(email, password);
-                navigation.navigate('TabNavigator');
+                // Chuyển hướng đến TabNavigator và màn hình Home
+                navigation.navigate('TabNavigator', {
+                    screen: 'Home',
+                    initial: false,
+                });
             } catch (error) {
                 Alert.alert('Email hoặc mật khẩu không chính xác!');
             }

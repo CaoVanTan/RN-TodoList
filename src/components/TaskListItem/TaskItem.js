@@ -5,24 +5,29 @@ import React, { useState } from 'react';
 import Colors from '../../constants/Colors';
 
 const MenuItem = (props) => {
-    const { data, style, status, onPress } = props;
-    const [isChecked, setChecked] = useState(data && data.status);
+    const { data, style, status, onPress, onLongPress } = props;
+    const [isChecked, setChecked] = useState(data && data.completed);
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
 
-    today = dd + '/' + mm + '/' + yyyy;
+    today = dd + '-' + mm + '-' + yyyy;
 
     return (
-        <TouchableHighlight activeOpacity={0.8} underlayColor={Colors.textGray2} onPress={onPress}>
+        <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={Colors.textGray2}
+            onPress={onPress}
+            onLongPress={onLongPress}
+        >
             <View style={[styles.container, style]}>
                 <View style={styles.containerLeft}>
                     <Checkbox
                         style={status == 'finished' ? styles.checkboxDisable : styles.checkbox}
                         value={isChecked}
-                        onValueChange={setChecked}
+                        onValueChange={() => setChecked(!isChecked)}
                         color={status == 'finished' ? Colors.textGray2 : null}
                     />
 
@@ -30,7 +35,7 @@ const MenuItem = (props) => {
                 </View>
                 <View style={styles.containerRight}>
                     <Text style={status == 'finished' ? styles.timeDisable : styles.time}>
-                        {data && data.time == today ? 'Hôm nay' : data.time}
+                        {data && data.date == today ? 'Hôm nay' : data.date}
                     </Text>
                 </View>
             </View>

@@ -7,14 +7,17 @@ import {
     TouchableHighlight,
     TouchableWithoutFeedback,
 } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { AntDesign, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { collection, addDoc } from 'firebase/firestore';
 
 import Colors from '../../constants/Colors';
 import ButtonIcon from '../Button/ButtonIcon';
 import ModalDate from './ModalDate';
 import MenuIcon from '../Menu/MenuIcon';
 import Popup from '../Popup/Popup';
+import { auth, db } from '../../../firebase';
+import { AppContext } from '../../../AppContext';
 
 const tags = [
     {
@@ -66,6 +69,30 @@ const ModalAddTask = (props) => {
     const [modalTag, setModalTag] = useState(false);
     const [modalType, setModalType] = useState(false);
     const [modalDate, setModalDate] = useState(false);
+    const { setIsRefresh } = useContext(AppContext);
+
+    var date = new Date();
+    var dd = String(date.getDate()).padStart(2, '0');
+    var mm = String(date.getMonth() + 1).padStart(2, '0');
+    var yyyy = date.getFullYear();
+
+    var today = dd + '-' + mm + '-' + yyyy;
+    var time = date.toTimeString();
+
+    const addTodo = async (todo) => {
+        const docRef = await addDoc(collection(db, 'todos'), {
+            userId: auth.currentUser.uid,
+            title: todo,
+            completed: false,
+            date: today,
+            time: time,
+            timeComplete: '',
+        });
+
+        setModalVisible(!visible);
+        setText('');
+        setIsRefresh(true);
+    };
 
     useEffect(() => {
         setTimeout(() => inputRef.current.focus(), 150);
@@ -173,7 +200,7 @@ const ModalAddTask = (props) => {
                                     activeOpacity={0.6}
                                     underlayColor={Colors.primary}
                                     disabled={text === '' ? true : false}
-                                    onPress={() => console.log(text)}
+                                    onPress={() => addTodo(text)}
                                 >
                                     <Ionicons
                                         name="send"

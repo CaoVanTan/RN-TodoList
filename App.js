@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
+import { AppContext } from './AppContext';
 import { auth } from './firebase';
 import RootNavigator from './src/navigation/RootNavigator';
 import { Text, View } from 'react-native';
@@ -10,8 +11,8 @@ import { Text, View } from 'react-native';
 export default function App() {
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
-
-    console.log(auth.currentUser);
+    const [todos, setTodos] = useState([]);
+    const [isRefresh, setIsRefresh] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -33,8 +34,17 @@ export default function App() {
     }
 
     return (
-        <NavigationContainer>
-            <RootNavigator user={user} />
-        </NavigationContainer>
+        <AppContext.Provider
+            value={{
+                todos,
+                setTodos: (todos) => setTodos(todos),
+                isRefresh,
+                setIsRefresh: (isRefresh) => setIsRefresh(isRefresh),
+            }}
+        >
+            <NavigationContainer>
+                <RootNavigator user={user} />
+            </NavigationContainer>
+        </AppContext.Provider>
     );
 }

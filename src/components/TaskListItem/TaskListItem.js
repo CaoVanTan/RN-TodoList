@@ -1,13 +1,28 @@
-import { StyleSheet, FlatList, View, Text, TouchableHighlight } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, FlatList, View, Text, TouchableHighlight, ToastAndroid } from 'react-native';
+import React, { useContext, useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
+import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc } from 'firebase/firestore';
 
+import { db } from '../../../firebase';
 import TaskItem from './TaskItem';
 import Colors from '../../constants/Colors';
+import { AppContext } from '../../../AppContext';
 
 const TaskListItem = (props) => {
     const { data, status, type, style, title } = props;
     const [visible, setVisible] = useState(true);
+    const { setIsRefresh } = useContext(AppContext);
+
+    let deleteTodo = async (todoId) => {
+        await deleteDoc(doc(db, 'todos', todoId));
+        setIsRefresh(true);
+        ToastAndroid.show('Đã xóa một nhiệm vụ!', ToastAndroid.LONG);
+    };
+
+    let checkTodo = async (todoId) => {
+        const toDoRef = doc(db, 'todos', todoId);
+        setDoc(toDoRef, { completed: isChecked }, { merge: true });
+    };
 
     return (
         <FlatList
@@ -23,7 +38,7 @@ const TaskListItem = (props) => {
                         <Text style={styles.title}>{status === 'finished' ? 'ĐÃ HOÀN THÀNH' : title}</Text>
                         {type === 'todo' && (
                             <View style={styles.wrapperRight}>
-                                <Text style={{ color: Colors.textGray3, marginRight: 8 }}>2</Text>
+                                {/* <Text style={{ color: Colors.textGray3, marginRight: 8 }}>2</Text> */}
                                 {visible ? (
                                     <Entypo name="chevron-small-down" size={24} color={Colors.textGray3} />
                                 ) : (
@@ -37,12 +52,25 @@ const TaskListItem = (props) => {
             data={data}
             renderItem={({ item }) => (
                 <>
-                    {status === 'finished' && item.status && visible && (
-                        <TaskItem data={item} type="checkbox" status="finished" onPress={() => {}} />
+                    {status === 'finished' && item.completed && visible && (
+                        <TaskItem
+                            data={item}
+                            key={item.id}
+                            type="checkbox"
+                            status="finished"
+                            onPress={() => {}}
+                            onLongPress={() => deleteTodo(item.id)}
+                        />
                     )}
 
-                    {status !== 'finished' && !item.status && (
-                        <TaskItem data={item} type="checkbox" onPress={() => {}} />
+                    {status !== 'finished' && !item.completed && (
+                        <TaskItem
+                            data={item}
+                            key={item.id}
+                            type="checkbox"
+                            onPress={() => {}}
+                            onLongPress={() => deleteTodo(item.id)}
+                        />
                     )}
                 </>
             )}
